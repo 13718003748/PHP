@@ -1,0 +1,7 @@
+<?php
+$weight=60;
+$high=1.7;
+$values=$weight/($high*$high);
+$result=$values>25?"偏胖":($values>=20?"正常":"偏瘦");
+echo $result; 
+?>
