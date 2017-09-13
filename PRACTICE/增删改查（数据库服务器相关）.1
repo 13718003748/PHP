@@ -1,0 +1,43 @@
+<?php
+/*
+接收客户端提交的新用户数据，保存入数据库，实现用户注册。
+输入：uname、upwd、email、phone
+输出："注册成功！" 或者 "注册失败！'等形式的提示消息
+*/
+//1.接收客户端提交的注册数据uname/upwd/email/phone
+@$n = $_REQUEST['uname'];
+if($n===null || $n===""){
+	die("uname required"); //终止当前页面的执行 
+}
+@$p = $_REQUEST['upwd'];
+if($p===null || $p===""){
+	die("upwd required"); //终止当前页面的执行 
+}
+@$e = $_REQUEST['email'];
+if($e===null || $e===""){
+	die("email required"); //终止当前页面的执行 
+}
+@$h = $_REQUEST['phone'];
+if($h===null || $h===""){
+	die("phone required"); //终止当前页面的执行 
+}
+
+//2.连接数据库服务器
+#$conn = mysqli_connect("127.0.0.1","root","","xuezi",3306);
+require("0_init.php");
+
+//3.向数据库服务器提交SQL语句
+$sql = "INSERT INTO xz_user(uname,upwd,email,phone) VALUES('$n','$p','$e','$h')";
+$result = mysqli_query($conn, $sql);
+
+//4.查看SQL执行结果 DML: 失败-false 成功-true
+if($result===false){
+	echo "注册失败！<br>";
+	echo "请检查SQL：$sql";
+}else{
+	echo "注册成功！<br>";
+	$uid = mysqli_insert_id($conn);
+	echo "新用户在数据库中的编号为：$uid";
+}
+
+
