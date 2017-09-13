@@ -1,0 +1,37 @@
+<?php
+/*
+更新用户的基本信息，包括用户真实姓名、性别、邮箱、电话
+输入：user_name/gender/email/phone/uid
+输出：“修改成功”或“修改失败”等提示内容
+*/
+//1.接收客户端提交的数据
+@$s=$_REQUEST['user_name'];
+if($s===null || $s===""){
+	die("名字不能为空");
+}
+@$g=$_REQUEST['gender'];
+if($g===null || $g===""){
+	die("性别不能为空");
+}
+@$e=$_REQUEST['eamil'];
+if($e===null || $e===""){
+	die("邮箱不能为空");
+}
+@$p=$_REQUEST['phone'];
+if($p===null || $p===""){
+	die("电话不能为空");
+}
+//2.连接到数据库服务器
+require("0_init.php");
+
+//3.向数据库服务器提交SQL语句 UPDATE...
+$sql="UPDATE xz_user SET user_name='$s',";
+$result=mysqli_query($conn,$sql);
+//4.查看执行结果  DML: 失败-false  成功-true
+if($result===false){
+	echo "修改失败";
+}else{
+	echo "修改成功";
+	$count=mysqli_insert_rows($result);
+	echo "$count";
+}
