@@ -1,0 +1,41 @@
+<?php
+/*
+接收客户端提交的登录信息，进行数据库验证，提示登录成功还是失败
+输入：uname、upwd
+输出：“登录成功”或“登录失败”
+*/
+//1.接收客户端提交的数据uname、upwd	
+@$n = $_REQUEST['uname'];
+if($n===null || $n===""){
+	die("uname required");
+}
+@$p = $_REQUEST['upwd'];
+if($p===null || $p===""){
+	die("upwd required");
+}
+
+//2.连接到数据库服务器
+require("0_init.php");
+
+
+//3.向数据库服务器提交SQL语句，进行登录验证
+$sql = "SELECT * FROM xz_user WHERE uname='$n' AND upwd='$p'";
+$result = mysqli_query($conn, $sql);
+
+//4.查看执行结果     DQL: 失败-false 成功-结果集的描述对象
+if($result===false){
+	echo "SQL执行失败！<br>";
+	echo "请查看SQL语法：$sql";
+}else{
+	echo "SQL执行成功！将进一步验证查询结果<br>";
+	#试着抓取一行查询结果——返回索引数组或null
+	#$user = mysqli_fetch_row($result);
+	#试着抓取一行查询结果——返回关联数组或null
+	$user = mysqli_fetch_assoc($result);
+	#var_dump($user);  临时查看一下这一行中的内容
+	if($user===null){	#没有抓取到一行记录
+		echo "用户名或密码错误！";	
+	}else{				#能够抓取到一行记录
+		echo "登录成功！";
+	}
+}
